@@ -1,0 +1,481 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		92112779176B00C30030AD92 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92112778176B00C30030AD92 /* Cocoa.framework */; };
+		92112783176B00C30030AD92 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 92112781176B00C30030AD92 /* InfoPlist.strings */; };
+		92112785176B00C30030AD92 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 92112784176B00C30030AD92 /* main.m */; };
+		92112789176B00C30030AD92 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 92112787176B00C30030AD92 /* Credits.rtf */; };
+		9211278C176B00C30030AD92 /* WWDCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9211278B176B00C30030AD92 /* WWDCAppDelegate.m */; };
+		9211278F176B00C30030AD92 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9211278D176B00C30030AD92 /* MainMenu.xib */; };
+		92112791176B00C30030AD92 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92112790176B00C30030AD92 /* Images.xcassets */; };
+		92112798176B00C30030AD92 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92112797176B00C30030AD92 /* XCTest.framework */; };
+		92112799176B00C30030AD92 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92112778176B00C30030AD92 /* Cocoa.framework */; };
+		921127A1176B00C30030AD92 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9211279F176B00C30030AD92 /* InfoPlist.strings */; };
+		921127A3176B00C30030AD92 /* WWDCDownloaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 921127A2176B00C30030AD92 /* WWDCDownloaderTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9211279A176B00C30030AD92 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9211276D176B00C30030AD92 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 92112774176B00C30030AD92;
+			remoteInfo = WWDCDownloader;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		92112775176B00C30030AD92 /* WWDCDownloader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCDownloader.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		92112778176B00C30030AD92 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		9211277B176B00C30030AD92 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		9211277C176B00C30030AD92 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		9211277D176B00C30030AD92 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		92112780176B00C30030AD92 /* WWDCDownloader-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WWDCDownloader-Info.plist"; sourceTree = "<group>"; };
+		92112782176B00C30030AD92 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		92112784176B00C30030AD92 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		92112786176B00C30030AD92 /* WWDCDownloader-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDCDownloader-Prefix.pch"; sourceTree = "<group>"; };
+		92112788176B00C30030AD92 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		9211278A176B00C30030AD92 /* WWDCAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WWDCAppDelegate.h; sourceTree = "<group>"; };
+		9211278B176B00C30030AD92 /* WWDCAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WWDCAppDelegate.m; sourceTree = "<group>"; };
+		9211278E176B00C30030AD92 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		92112790176B00C30030AD92 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		92112796176B00C30030AD92 /* WWDCDownloaderTests.xctest */ = {isa = PBXFileReference; explicitFileType = folder; includeInIndex = 0; path = WWDCDownloaderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		92112797176B00C30030AD92 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		9211279E176B00C30030AD92 /* WWDCDownloaderTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WWDCDownloaderTests-Info.plist"; sourceTree = "<group>"; };
+		921127A0176B00C30030AD92 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		921127A2176B00C30030AD92 /* WWDCDownloaderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WWDCDownloaderTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		92112772176B00C30030AD92 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				92112779176B00C30030AD92 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		92112793176B00C30030AD92 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				92112799176B00C30030AD92 /* Cocoa.framework in Frameworks */,
+				92112798176B00C30030AD92 /* XCTest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9211276C176B00C30030AD92 = {
+			isa = PBXGroup;
+			children = (
+				9211277E176B00C30030AD92 /* WWDCDownloader */,
+				9211279C176B00C30030AD92 /* WWDCDownloaderTests */,
+				92112777176B00C30030AD92 /* Frameworks */,
+				92112776176B00C30030AD92 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		92112776176B00C30030AD92 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				92112775176B00C30030AD92 /* WWDCDownloader.app */,
+				92112796176B00C30030AD92 /* WWDCDownloaderTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		92112777176B00C30030AD92 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				92112778176B00C30030AD92 /* Cocoa.framework */,
+				92112797176B00C30030AD92 /* XCTest.framework */,
+				9211277A176B00C30030AD92 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9211277A176B00C30030AD92 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9211277B176B00C30030AD92 /* AppKit.framework */,
+				9211277C176B00C30030AD92 /* CoreData.framework */,
+				9211277D176B00C30030AD92 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		9211277E176B00C30030AD92 /* WWDCDownloader */ = {
+			isa = PBXGroup;
+			children = (
+				9211278A176B00C30030AD92 /* WWDCAppDelegate.h */,
+				9211278B176B00C30030AD92 /* WWDCAppDelegate.m */,
+				9211278D176B00C30030AD92 /* MainMenu.xib */,
+				92112790176B00C30030AD92 /* Images.xcassets */,
+				9211277F176B00C30030AD92 /* Supporting Files */,
+			);
+			path = WWDCDownloader;
+			sourceTree = "<group>";
+		};
+		9211277F176B00C30030AD92 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				92112780176B00C30030AD92 /* WWDCDownloader-Info.plist */,
+				92112781176B00C30030AD92 /* InfoPlist.strings */,
+				92112784176B00C30030AD92 /* main.m */,
+				92112786176B00C30030AD92 /* WWDCDownloader-Prefix.pch */,
+				92112787176B00C30030AD92 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9211279C176B00C30030AD92 /* WWDCDownloaderTests */ = {
+			isa = PBXGroup;
+			children = (
+				921127A2176B00C30030AD92 /* WWDCDownloaderTests.m */,
+				9211279D176B00C30030AD92 /* Supporting Files */,
+			);
+			path = WWDCDownloaderTests;
+			sourceTree = "<group>";
+		};
+		9211279D176B00C30030AD92 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9211279E176B00C30030AD92 /* WWDCDownloaderTests-Info.plist */,
+				9211279F176B00C30030AD92 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		92112774176B00C30030AD92 /* WWDCDownloader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 921127A6176B00C30030AD92 /* Build configuration list for PBXNativeTarget "WWDCDownloader" */;
+			buildPhases = (
+				92112771176B00C30030AD92 /* Sources */,
+				92112772176B00C30030AD92 /* Frameworks */,
+				92112773176B00C30030AD92 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WWDCDownloader;
+			productName = WWDCDownloader;
+			productReference = 92112775176B00C30030AD92 /* WWDCDownloader.app */;
+			productType = "com.apple.product-type.application";
+		};
+		92112795176B00C30030AD92 /* WWDCDownloaderTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 921127A9176B00C30030AD92 /* Build configuration list for PBXNativeTarget "WWDCDownloaderTests" */;
+			buildPhases = (
+				92112792176B00C30030AD92 /* Sources */,
+				92112793176B00C30030AD92 /* Frameworks */,
+				92112794176B00C30030AD92 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9211279B176B00C30030AD92 /* PBXTargetDependency */,
+			);
+			name = WWDCDownloaderTests;
+			productName = WWDCDownloaderTests;
+			productReference = 92112796176B00C30030AD92 /* WWDCDownloaderTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9211276D176B00C30030AD92 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = WWDC;
+				LastUpgradeCheck = 0500;
+				TargetAttributes = {
+					92112795176B00C30030AD92 = {
+						TestTargetID = 92112774176B00C30030AD92;
+					};
+				};
+			};
+			buildConfigurationList = 92112770176B00C30030AD92 /* Build configuration list for PBXProject "WWDCDownloader" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 9211276C176B00C30030AD92;
+			productRefGroup = 92112776176B00C30030AD92 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				92112774176B00C30030AD92 /* WWDCDownloader */,
+				92112795176B00C30030AD92 /* WWDCDownloaderTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		92112773176B00C30030AD92 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				92112783176B00C30030AD92 /* InfoPlist.strings in Resources */,
+				92112791176B00C30030AD92 /* Images.xcassets in Resources */,
+				92112789176B00C30030AD92 /* Credits.rtf in Resources */,
+				9211278F176B00C30030AD92 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		92112794176B00C30030AD92 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				921127A1176B00C30030AD92 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		92112771176B00C30030AD92 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				92112785176B00C30030AD92 /* main.m in Sources */,
+				9211278C176B00C30030AD92 /* WWDCAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		92112792176B00C30030AD92 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				921127A3176B00C30030AD92 /* WWDCDownloaderTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9211279B176B00C30030AD92 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 92112774176B00C30030AD92 /* WWDCDownloader */;
+			targetProxy = 9211279A176B00C30030AD92 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		92112781176B00C30030AD92 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				92112782176B00C30030AD92 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		92112787176B00C30030AD92 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				92112788176B00C30030AD92 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		9211278D176B00C30030AD92 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9211278E176B00C30030AD92 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		9211279F176B00C30030AD92 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				921127A0176B00C30030AD92 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		921127A4176B00C30030AD92 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		921127A5176B00C30030AD92 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		921127A7176B00C30030AD92 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WWDCDownloader/WWDCDownloader-Prefix.pch";
+				INFOPLIST_FILE = "WWDCDownloader/WWDCDownloader-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		921127A8176B00C30030AD92 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WWDCDownloader/WWDCDownloader-Prefix.pch";
+				INFOPLIST_FILE = "WWDCDownloader/WWDCDownloader-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		921127AA176B00C30030AD92 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/WWDCDownloader.app/Contents/MacOS/WWDCDownloader";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WWDCDownloader/WWDCDownloader-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "WWDCDownloaderTests/WWDCDownloaderTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		921127AB176B00C30030AD92 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/WWDCDownloader.app/Contents/MacOS/WWDCDownloader";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "WWDCDownloader/WWDCDownloader-Prefix.pch";
+				INFOPLIST_FILE = "WWDCDownloaderTests/WWDCDownloaderTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		92112770176B00C30030AD92 /* Build configuration list for PBXProject "WWDCDownloader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				921127A4176B00C30030AD92 /* Debug */,
+				921127A5176B00C30030AD92 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		921127A6176B00C30030AD92 /* Build configuration list for PBXNativeTarget "WWDCDownloader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				921127A7176B00C30030AD92 /* Debug */,
+				921127A8176B00C30030AD92 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		921127A9176B00C30030AD92 /* Build configuration list for PBXNativeTarget "WWDCDownloaderTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				921127AA176B00C30030AD92 /* Debug */,
+				921127AB176B00C30030AD92 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9211276D176B00C30030AD92 /* Project object */;
+}

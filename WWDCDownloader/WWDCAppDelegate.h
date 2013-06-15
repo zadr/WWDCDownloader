@@ -5,7 +5,7 @@
 //  Created by zach on 6/14/13.
 //
 
-@import Cocoa;
+#import <Cocoa/Cocoa.h>
 
 @interface WWDCAppDelegate : NSObject <NSApplicationDelegate>
 

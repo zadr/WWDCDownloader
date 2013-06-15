@@ -45,7 +45,7 @@ Example HTML that we look for (with the formatting cleaned up):
 
 #import "DOMIteration.h"
 
-@import WebKit;
+#import <WebKit/WebKit.h>
 
 @implementation WWDCWebsiteInteractionController {
 	BOOL _foundVideosPage;
@@ -121,7 +121,7 @@ Example HTML that we look for (with the formatting cleaned up):
 - (void) downloadFromAnchorElement:(DOMHTMLAnchorElement *) anchorElement forSessionNamed:(NSString *) sessionName {
 	static NSString *downloadsFolder = nil;
 	if (!downloadsFolder) {
-		NSString *temporaryFolder = [NSSearchPathForDirectoriesInDomains(NSDownloadsDirectory, NSUserDomainMask, YES) firstObject];
+		NSString *temporaryFolder = [NSSearchPathForDirectoriesInDomains(NSDownloadsDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 		downloadsFolder = [[temporaryFolder stringByAppendingPathComponent:@"WWDC 2013/"] copy];
 
 		if (![[NSFileManager defaultManager] fileExistsAtPath:downloadsFolder]) {

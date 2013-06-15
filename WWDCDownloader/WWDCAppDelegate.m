@@ -4,15 +4,17 @@
 //
 //  Created by zach on 6/14/13.
 //
-//
 
 #import "WWDCAppDelegate.h"
 
-@implementation WWDCAppDelegate
+#import "WWDCWebsiteInteractionController.h"
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{
-	// Insert code here to initialize your application
+@implementation WWDCAppDelegate {
+	WWDCWebsiteInteractionController *_browserViewController;
 }
 
+- (void) applicationDidFinishLaunching:(NSNotification *) notification {
+	_browserViewController = [[WWDCWebsiteInteractionController alloc] init];
+	[_browserViewController showWindow:nil];
+}
 @end

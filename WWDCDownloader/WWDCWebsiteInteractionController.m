@@ -63,9 +63,7 @@ Example HTML that we look for (with the formatting cleaned up):
 
 	_WWDCVideosURL = [NSURL URLWithString:@"https://developer.apple.com/wwdc/videos/"];
 
-	NSURLRequest *request = [NSURLRequest requestWithURL:_WWDCVideosURL];
-
-	[self.webView.mainFrame loadRequest:request];
+	[self.webView.mainFrame loadRequest:[NSURLRequest requestWithURL:_WWDCVideosURL]];
 
 	self.webView.frameLoadDelegate = self;
 	self.webView.resourceLoadDelegate = self;
@@ -98,6 +96,7 @@ Example HTML that we look for (with the formatting cleaned up):
 						return;
 					}
 
+					// finally, get each session's video/pdf in the list
 					[unorderedListElement.children enumerateObjectsUsingBlock:^(DOMObject *listObject, unsigned listIndex, BOOL *stopListEnumeration) {
 						[self findDownloadsFromDOMLIElement:(DOMHTMLLIElement *)listObject];
 					}];

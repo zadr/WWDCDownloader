@@ -158,10 +158,34 @@
 	self.statusCode = HTTPResponse.statusCode;
 
 	self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.localPath];
+
 	if (!self.fileHandle) {
 		[[NSFileManager defaultManager] createFileAtPath:self.localPath contents:nil attributes:nil];
 
 		self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.localPath];
+	} else {
+		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.localPath error:NULL];
+		if ([attributes[NSFileType] isEqualToString:NSFileTypeSymbolicLink]) {
+			NSString *resolvedPath = [[NSFileManager defaultManager] destinationOfSymbolicLinkAtPath:self.localPath error:NULL];
+			attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:resolvedPath error:NULL];
+		}
+
+		BOOL equalSize = [HTTPResponse.allHeaderFields[@"Content-Length"] isEqual:[attributes[NSFileSize] stringValue]];
+
+		if (equalSize) {
+			NSLog(@"%@ already downloaded at %@", self.remoteAddress, self.localPath);
+
+			[self.connection cancel];
+
+			[self _finishWithError:nil];
+		} else {
+			NSLog(@"exists, but different size: %@ v. %@, restarting", HTTPResponse.allHeaderFields[@"Content-Length"], attributes[NSFileSize]);
+
+			[[NSFileManager defaultManager] removeItemAtPath:self.localPath error:NULL];
+			[[NSFileManager defaultManager] createFileAtPath:self.localPath contents:nil attributes:nil];
+
+			self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.localPath];
+		}
 	}
 }
 

@@ -89,6 +89,8 @@
 
 - (void) start {
 	@autoreleasepool {
+		NSLog(@"Starting: %@", self.remoteAddress);
+
 		[self main];
 
 		while (!self.cancelled && self.executing && !self.finished) {
@@ -167,19 +169,18 @@
 		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.localPath error:NULL];
 		if ([attributes[NSFileType] isEqualToString:NSFileTypeSymbolicLink]) {
 			NSString *resolvedPath = [[NSFileManager defaultManager] destinationOfSymbolicLinkAtPath:self.localPath error:NULL];
+
 			attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:resolvedPath error:NULL];
 		}
 
 		BOOL equalSize = [HTTPResponse.allHeaderFields[@"Content-Length"] isEqual:[attributes[NSFileSize] stringValue]];
 
 		if (equalSize) {
-			NSLog(@"%@ already downloaded at %@", self.remoteAddress, self.localPath);
-
 			[self.connection cancel];
 
 			[self _finishWithError:nil];
 		} else {
-			NSLog(@"exists, but different size: %@ v. %@, restarting", HTTPResponse.allHeaderFields[@"Content-Length"], attributes[NSFileSize]);
+			NSLog(@"%@ exists, but different size: %@ v. %@, restarting", self.localPath.lastPathComponent, HTTPResponse.allHeaderFields[@"Content-Length"], attributes[NSFileSize]);
 
 			[[NSFileManager defaultManager] removeItemAtPath:self.localPath error:NULL];
 			[[NSFileManager defaultManager] createFileAtPath:self.localPath contents:nil attributes:nil];

@@ -10,7 +10,7 @@
 @interface WWDCWebsiteInteractionController : NSWindowController
 @property (assign) IBOutlet WebView *webView;
 
-@property (assign) IBOutlet NSButton *HDCheckbox;
+@property (assign) IBOutlet NSPopUpButton *videoPopUpButton;
 @property (assign) IBOutlet NSButton *PDFCheckbox;
 
 @property (assign) IBOutlet NSButton *downloadButton;

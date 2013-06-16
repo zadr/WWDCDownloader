@@ -47,6 +47,13 @@ Example HTML that we look for (with the formatting cleaned up):
 
 #import <WebKit/WebKit.h>
 
+enum {
+	WWDCVideoQualityNone = 0,
+	WWDCVideoQualitySD = (1 << 0),
+	WWDCVideoQualityHD = (1 << 1),
+	WWDCVideoQualityBoth = (WWDCVideoQualitySD | WWDCVideoQualityHD)
+};
+
 @implementation WWDCWebsiteInteractionController {
 	BOOL _foundVideosPage;
 	NSURL *_WWDCVideosURL;
@@ -67,6 +74,10 @@ Example HTML that we look for (with the formatting cleaned up):
 
 	self.webView.frameLoadDelegate = self;
 	self.webView.resourceLoadDelegate = self;
+
+	[self.videoPopUpButton selectItemAtIndex:WWDCVideoQualityHD];
+
+	[self.downloadButton setEnabled:NO];
 }
 
 #pragma mark -
@@ -135,7 +146,7 @@ Example HTML that we look for (with the formatting cleaned up):
 
 	WWDCURLRequest *request = [WWDCURLRequest requestWithRemoteAddress:anchorElement.href savePath:saveLocation];
 	request.completionBlock = ^{
-		NSLog(@"done from %@ to %@", anchorElement.href, saveLocation);
+		NSLog(@"done downloading \"%@\" to %@", saveLocation.lastPathComponent, saveLocation);
 	};
 
 	[[NSOperationQueue requestQueue] addOperation:request];
@@ -162,11 +173,11 @@ Example HTML that we look for (with the formatting cleaned up):
 			return;
 		}
 
-		if (self.HDCheckbox.state == NSOnState && [anchorElement.href hasSuffix:@"HD.mov?dl=1"]) {
+		if (((self.videoPopUpButton.indexOfSelectedItem & WWDCVideoQualityHD) == WWDCVideoQualityHD) && [anchorElement.href hasSuffix:@"HD.mov?dl=1"]) {
 			[self downloadFromAnchorElement:anchorElement forSessionNamed:sessionName];
 		}
 
-		if (self.HDCheckbox.state == NSOffState && [anchorElement.href hasSuffix:@"SD.mov?dl=1"]) {
+		if (((self.videoPopUpButton.indexOfSelectedItem & WWDCVideoQualitySD) == WWDCVideoQualitySD) && [anchorElement.href hasSuffix:@"SD.mov?dl=1"]) {
 			[self downloadFromAnchorElement:anchorElement forSessionNamed:sessionName];
 		}
 

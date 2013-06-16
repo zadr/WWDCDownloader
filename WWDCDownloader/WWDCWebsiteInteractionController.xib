@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4457.6" systemVersion="12E55" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4457.6" systemVersion="13A476u" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment defaultVersion="1080" identifier="macosx"/>
         <development version="5000" identifier="xcode"/>
@@ -10,9 +10,9 @@
         <customObject id="-2" userLabel="File's Owner" customClass="WWDCWebsiteInteractionController">
             <connections>
                 <action selector="download:" destination="NZy-fD-Iji" id="waN-aq-q9q"/>
-                <outlet property="HDCheckbox" destination="5bc-xI-uvG" id="hKJ-fe-jPV"/>
                 <outlet property="PDFCheckbox" destination="tdz-K1-rIS" id="i9j-Fz-A4t"/>
                 <outlet property="downloadButton" destination="NZy-fD-Iji" id="nSj-tc-pSv"/>
+                <outlet property="videoPopUpButton" destination="wfg-Qd-HcC" id="22e-HQ-bgG"/>
                 <outlet property="webView" destination="xep-Fu-xaN" id="PpM-oc-Lag"/>
                 <outlet property="window" destination="uGQ-0R-zCI" id="314-UV-mDt"/>
             </connections>
@@ -21,54 +21,70 @@
         <customObject id="-3" userLabel="Application"/>
         <window title="WWDCDownloader" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" showsToolbarButton="NO" animationBehavior="default" id="uGQ-0R-zCI">
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
-            <rect key="contentRect" x="335" y="390" width="480" height="372"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1418"/>
+            <rect key="contentRect" x="335" y="390" width="661" height="469"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1028"/>
             <view key="contentView" id="sRh-du-LW5">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="372"/>
+                <rect key="frame" x="0.0" y="0.0" width="661" height="469"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <webView translatesAutoresizingMaskIntoConstraints="NO" id="xep-Fu-xaN">
-                        <rect key="frame" x="0.0" y="42" width="480" height="330"/>
+                        <rect key="frame" x="0.0" y="54" width="661" height="415"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <webPreferences key="preferences" defaultFontSize="12" defaultFixedFontSize="12" javaEnabled="NO">
                             <nil key="identifier"/>
                         </webPreferences>
                     </webView>
-                    <button translatesAutoresizingMaskIntoConstraints="NO" id="5bc-xI-uvG">
-                        <rect key="frame" x="18" y="18" width="109" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Download HD" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="BeF-1m-muf">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="tdz-K1-rIS">
-                        <rect key="frame" x="131" y="18" width="120" height="18"/>
+                        <rect key="frame" x="218" y="21" width="120" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="116" id="193-Gd-yys"/>
+                        </constraints>
                         <buttonCell key="cell" type="check" title="Download PDFs" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="bIJ-Kc-XfD">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NZy-fD-Iji">
-                        <rect key="frame" x="363" y="6" width="103" height="32"/>
+                        <rect key="frame" x="544" y="13" width="103" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Download" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="o4o-7T-gMz">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
+                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wfg-Qd-HcC">
+                        <rect key="frame" x="18" y="17" width="181" height="26"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="176" id="WDY-qN-XCh"/>
+                        </constraints>
+                        <popUpButtonCell key="cell" type="push" title="Download HD Quality" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="60l-2B-Ki4" id="M1E-JN-qCI">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <menu key="menu" title="OtherViews" id="bZX-EC-hcI">
+                                <items>
+                                    <menuItem title="Don't Download Videos" id="rfS-Ab-MxV"/>
+                                    <menuItem title="Download SD Quality" id="p7R-D4-78F"/>
+                                    <menuItem title="Download HD Quality" state="on" id="60l-2B-Ki4"/>
+                                    <menuItem title="Download Both Qualities" id="hSH-Bk-K4W">
+                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                    </menuItem>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                    </popUpButton>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="tdz-K1-rIS" firstAttribute="leading" secondItem="5bc-xI-uvG" secondAttribute="trailing" constant="8" symbolic="YES" id="AlJ-SR-2ds"/>
+                    <constraint firstItem="NZy-fD-Iji" firstAttribute="baseline" secondItem="tdz-K1-rIS" secondAttribute="baseline" constant="-1" id="8qg-yV-l1M"/>
+                    <constraint firstItem="tdz-K1-rIS" firstAttribute="baseline" secondItem="wfg-Qd-HcC" secondAttribute="baseline" constant="1" id="Ch6-na-Cv7"/>
                     <constraint firstAttribute="trailing" secondItem="NZy-fD-Iji" secondAttribute="trailing" constant="20" id="N2H-ip-Utj"/>
                     <constraint firstItem="xep-Fu-xaN" firstAttribute="leading" secondItem="sRh-du-LW5" secondAttribute="leading" id="OrM-le-Xvd"/>
-                    <constraint firstItem="tdz-K1-rIS" firstAttribute="baseline" secondItem="NZy-fD-Iji" secondAttribute="baseline" constant="-3" id="WvI-yH-q5Y"/>
-                    <constraint firstItem="5bc-xI-uvG" firstAttribute="leading" secondItem="sRh-du-LW5" secondAttribute="leading" constant="20" symbolic="YES" id="bGW-dV-fps"/>
-                    <constraint firstAttribute="bottom" secondItem="tdz-K1-rIS" secondAttribute="bottom" constant="20" symbolic="YES" id="d3h-XR-R9F"/>
-                    <constraint firstItem="xep-Fu-xaN" firstAttribute="trailing" secondItem="sRh-du-LW5" secondAttribute="trailing" id="nAB-xE-aK7"/>
-                    <constraint firstItem="5bc-xI-uvG" firstAttribute="top" secondItem="xep-Fu-xaN" secondAttribute="bottom" constant="8" symbolic="YES" id="pXq-w7-lmC"/>
-                    <constraint firstItem="tdz-K1-rIS" firstAttribute="baseline" secondItem="5bc-xI-uvG" secondAttribute="baseline" id="td5-ln-MDp"/>
+                    <constraint firstItem="tdz-K1-rIS" firstAttribute="leading" secondItem="wfg-Qd-HcC" secondAttribute="trailing" constant="24" id="PAK-wI-twl"/>
+                    <constraint firstAttribute="bottom" secondItem="tdz-K1-rIS" secondAttribute="bottom" constant="23" id="d3h-XR-R9F"/>
+                    <constraint firstItem="xep-Fu-xaN" firstAttribute="trailing" secondItem="sRh-du-LW5" secondAttribute="trailing" id="eQs-yK-aAX"/>
+                    <constraint firstAttribute="bottom" secondItem="xep-Fu-xaN" secondAttribute="bottom" constant="54" id="ejj-be-Yfa"/>
+                    <constraint firstItem="wfg-Qd-HcC" firstAttribute="leading" secondItem="sRh-du-LW5" secondAttribute="leading" constant="20" id="muP-kJ-S4d"/>
                     <constraint firstItem="xep-Fu-xaN" firstAttribute="top" secondItem="sRh-du-LW5" secondAttribute="top" id="wrU-5b-JAK"/>
                 </constraints>
             </view>
@@ -86,9 +102,9 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/WWDCWebsiteInteractionController.h"/>
             <relationships>
                 <relationship kind="action" name="download:"/>
-                <relationship kind="outlet" name="HDCheckbox" candidateClass="NSButton"/>
                 <relationship kind="outlet" name="PDFCheckbox" candidateClass="NSButton"/>
                 <relationship kind="outlet" name="downloadButton" candidateClass="NSButton"/>
+                <relationship kind="outlet" name="videoPopUpButton" candidateClass="NSPopUpButton"/>
                 <relationship kind="outlet" name="webView" candidateClass="WebView"/>
             </relationships>
         </class>

@@ -95,7 +95,7 @@
 
 		while (!self.cancelled && self.executing && !self.finished) {
 			@autoreleasepool {
-				[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.]];
+				[[NSRunLoop currentRunLoop] runUntilDate:[NSDate distantFuture]];
 			}
 		}
 	}
@@ -158,6 +158,12 @@
 - (void) connection:(NSURLConnection *) connection didReceiveResponse:(NSURLResponse *) response {
 	NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)response;
 	self.statusCode = HTTPResponse.statusCode;
+
+	if ((self.statusCode / 100) != 2) {
+		[self _finishWithError:nil];
+
+		return;
+	}
 
 	self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.localPath];
 

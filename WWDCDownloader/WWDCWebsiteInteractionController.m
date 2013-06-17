@@ -54,13 +54,23 @@ enum {
 	WWDCVideoQualityBoth = (WWDCVideoQualitySD | WWDCVideoQualityHD)
 };
 
+@interface WWDCWebsiteInteractionController()
+@property (strong) NSMutableArray *downloadProgress;
+@property (assign) NSUInteger downloadCount;
+@end
+
 @implementation WWDCWebsiteInteractionController {
 	BOOL _foundVideosPage;
 	NSURL *_WWDCVideosURL;
 }
 
 - (id) init {
-	return (self = [super initWithWindowNibName:@"WWDCWebsiteInteractionController"]);
+	if (self = [super initWithWindowNibName:@"WWDCWebsiteInteractionController"]) {
+        _downloadProgress = [NSMutableArray array];
+        _downloadCount = 0;
+    }
+
+    return self;
 }
 
 #pragma mark -
@@ -144,9 +154,14 @@ enum {
 	NSString *saveLocation = [NSString stringWithFormat:@"%@ %@.%@", components[0], sessionName, components[1]];
 	saveLocation = [downloadsFolder stringByAppendingPathComponent:saveLocation];
 
+    [self.downloadProgress addObject:saveLocation];
+    self.downloadProgressBar.maxValue = self.downloadProgress.count;
+    __block WWDCWebsiteInteractionController *weakSelf = self;
 	WWDCURLRequest *request = [WWDCURLRequest requestWithRemoteAddress:anchorElement.href savePath:saveLocation];
 	request.completionBlock = ^{
 		NSLog(@"done downloading \"%@\" to %@", saveLocation.lastPathComponent, saveLocation);
+        weakSelf.downloadCount = weakSelf.downloadCount + 1;
+        weakSelf.downloadProgressBar.doubleValue = weakSelf.downloadCount;
 	};
 
 	[[NSOperationQueue requestQueue] addOperation:request];

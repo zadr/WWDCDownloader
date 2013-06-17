@@ -95,7 +95,7 @@
 
 		while (!self.cancelled && self.executing && !self.finished) {
 			@autoreleasepool {
-				[[NSRunLoop currentRunLoop] runUntilDate:[NSDate distantFuture]];
+				[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.]];
 			}
 		}
 	}

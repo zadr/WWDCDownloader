@@ -14,6 +14,7 @@
 @property (assign) IBOutlet NSButton *PDFCheckbox;
 
 @property (assign) IBOutlet NSButton *downloadButton;
+@property (assign) IBOutlet NSProgressIndicator *downloadProgressBar;
 
 - (IBAction) download:(id) sender;
 

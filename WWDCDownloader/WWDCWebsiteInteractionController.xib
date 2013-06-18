@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4457.6" systemVersion="13A476u" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4457.6" systemVersion="12E55" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment defaultVersion="1080" identifier="macosx"/>
         <development version="5000" identifier="xcode"/>
@@ -12,6 +12,7 @@
                 <action selector="download:" destination="NZy-fD-Iji" id="waN-aq-q9q"/>
                 <outlet property="PDFCheckbox" destination="tdz-K1-rIS" id="i9j-Fz-A4t"/>
                 <outlet property="downloadButton" destination="NZy-fD-Iji" id="nSj-tc-pSv"/>
+                <outlet property="downloadProgressBar" destination="iTS-qZ-m1M" id="f4n-WS-5yZ"/>
                 <outlet property="videoPopUpButton" destination="wfg-Qd-HcC" id="22e-HQ-bgG"/>
                 <outlet property="webView" destination="xep-Fu-xaN" id="PpM-oc-Lag"/>
                 <outlet property="window" destination="uGQ-0R-zCI" id="314-UV-mDt"/>
@@ -22,7 +23,7 @@
         <window title="WWDCDownloader" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" showsToolbarButton="NO" animationBehavior="default" id="uGQ-0R-zCI">
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="335" y="390" width="661" height="469"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1028"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1418"/>
             <view key="contentView" id="sRh-du-LW5">
                 <rect key="frame" x="0.0" y="0.0" width="661" height="469"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -61,7 +62,7 @@
                         </constraints>
                         <popUpButtonCell key="cell" type="push" title="Download HD Quality" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="60l-2B-Ki4" id="M1E-JN-qCI">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="menu"/>
                             <menu key="menu" title="OtherViews" id="bZX-EC-hcI">
                                 <items>
                                     <menuItem title="Don't Download Videos" id="rfS-Ab-MxV"/>
@@ -74,6 +75,10 @@
                             </menu>
                         </popUpButtonCell>
                     </popUpButton>
+                    <progressIndicator maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="iTS-qZ-m1M">
+                        <rect key="frame" x="344" y="19" width="198" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </progressIndicator>
                 </subviews>
                 <constraints>
                     <constraint firstItem="NZy-fD-Iji" firstAttribute="baseline" secondItem="tdz-K1-rIS" secondAttribute="baseline" constant="-1" id="8qg-yV-l1M"/>
@@ -81,10 +86,13 @@
                     <constraint firstAttribute="trailing" secondItem="NZy-fD-Iji" secondAttribute="trailing" constant="20" id="N2H-ip-Utj"/>
                     <constraint firstItem="xep-Fu-xaN" firstAttribute="leading" secondItem="sRh-du-LW5" secondAttribute="leading" id="OrM-le-Xvd"/>
                     <constraint firstItem="tdz-K1-rIS" firstAttribute="leading" secondItem="wfg-Qd-HcC" secondAttribute="trailing" constant="24" id="PAK-wI-twl"/>
+                    <constraint firstItem="iTS-qZ-m1M" firstAttribute="leading" secondItem="tdz-K1-rIS" secondAttribute="trailing" constant="8" id="RPZ-YM-shK"/>
                     <constraint firstAttribute="bottom" secondItem="tdz-K1-rIS" secondAttribute="bottom" constant="23" id="d3h-XR-R9F"/>
                     <constraint firstItem="xep-Fu-xaN" firstAttribute="trailing" secondItem="sRh-du-LW5" secondAttribute="trailing" id="eQs-yK-aAX"/>
                     <constraint firstAttribute="bottom" secondItem="xep-Fu-xaN" secondAttribute="bottom" constant="54" id="ejj-be-Yfa"/>
+                    <constraint firstItem="NZy-fD-Iji" firstAttribute="leading" secondItem="iTS-qZ-m1M" secondAttribute="trailing" constant="8" id="ih1-cg-h4N"/>
                     <constraint firstItem="wfg-Qd-HcC" firstAttribute="leading" secondItem="sRh-du-LW5" secondAttribute="leading" constant="20" id="muP-kJ-S4d"/>
+                    <constraint firstAttribute="bottom" secondItem="iTS-qZ-m1M" secondAttribute="bottom" constant="20" id="nAN-HR-Iy1"/>
                     <constraint firstItem="xep-Fu-xaN" firstAttribute="top" secondItem="sRh-du-LW5" secondAttribute="top" id="wrU-5b-JAK"/>
                 </constraints>
             </view>
@@ -104,6 +112,7 @@
                 <relationship kind="action" name="download:"/>
                 <relationship kind="outlet" name="PDFCheckbox" candidateClass="NSButton"/>
                 <relationship kind="outlet" name="downloadButton" candidateClass="NSButton"/>
+                <relationship kind="outlet" name="downloadProgressBar" candidateClass="NSProgressIndicator"/>
                 <relationship kind="outlet" name="videoPopUpButton" candidateClass="NSPopUpButton"/>
                 <relationship kind="outlet" name="webView" candidateClass="WebView"/>
             </relationships>

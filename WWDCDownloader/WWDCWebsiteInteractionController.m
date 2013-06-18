@@ -55,8 +55,8 @@ enum {
 };
 
 @interface WWDCWebsiteInteractionController()
-@property (strong) NSMutableArray *downloadProgress;
-@property (assign) NSUInteger downloadCount;
+@property (strong) NSMutableArray *knownDownloads;
+@property (assign) NSUInteger downloadsCount;
 @end
 
 @implementation WWDCWebsiteInteractionController {
@@ -65,12 +65,13 @@ enum {
 }
 
 - (id) init {
-	if (self = [super initWithWindowNibName:@"WWDCWebsiteInteractionController"]) {
-        _downloadProgress = [NSMutableArray array];
-        _downloadCount = 0;
-    }
+	if (!(self = [super initWithWindowNibName:@"WWDCWebsiteInteractionController"])) {
+		return nil;
+	}
 
-    return self;
+	_knownDownloads = [NSMutableArray array];
+
+	return self;
 }
 
 #pragma mark -
@@ -88,11 +89,14 @@ enum {
 	[self.videoPopUpButton selectItemAtIndex:WWDCVideoQualityHD];
 
 	[self.downloadButton setEnabled:NO];
+	[self.downloadProgressBar setHidden:YES];
 }
 
 #pragma mark -
 
 - (IBAction) download:(id) sender {
+	[self.downloadProgressBar setHidden:NO];
+
 	// find content first
 	[self.webView.mainFrameDocument.body.children enumerateObjectsUsingBlock:^(DOMHTMLElement *contentElement, unsigned contentIndex, BOOL *stopContentEnumeration) {
 		if (![contentElement.className isEqualToString:@"content"]) {
@@ -154,18 +158,21 @@ enum {
 	NSString *saveLocation = [NSString stringWithFormat:@"%@ %@.%@", components[0], sessionName, components[1]];
 	saveLocation = [downloadsFolder stringByAppendingPathComponent:saveLocation];
 
-    [self.downloadProgress addObject:saveLocation];
-    self.downloadProgressBar.maxValue = self.downloadProgress.count;
-    __block WWDCWebsiteInteractionController *weakSelf = self;
+	__weak typeof(self) weakSelf = self;
 	WWDCURLRequest *request = [WWDCURLRequest requestWithRemoteAddress:anchorElement.href savePath:saveLocation];
 	request.completionBlock = ^{
+		__strong typeof(weakSelf) strongSelf = weakSelf;
 		NSLog(@"done downloading \"%@\" to %@", saveLocation.lastPathComponent, saveLocation);
-        weakSelf.downloadCount = weakSelf.downloadCount + 1;
-        weakSelf.downloadProgressBar.doubleValue = weakSelf.downloadCount;
+
+		strongSelf.downloadsCount++;
+		strongSelf.downloadProgressBar.doubleValue = strongSelf.downloadsCount;
 	};
 
 	[[NSOperationQueue requestQueue] addOperation:request];
 
+	[self.knownDownloads addObject:saveLocation];
+
+	self.downloadProgressBar.maxValue = self.knownDownloads.count;
 }
 
 // see above for the element that is passed in

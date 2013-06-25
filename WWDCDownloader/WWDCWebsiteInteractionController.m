@@ -61,6 +61,7 @@ enum {
 
 @implementation WWDCWebsiteInteractionController {
 	BOOL _foundVideosPage;
+	BOOL _loginRequired;
 	NSURL *_WWDCVideosURL;
 }
 
@@ -177,6 +178,10 @@ enum {
 
 // see above for the element that is passed in
 - (void) findDownloadsFromDOMLIElement:(DOMHTMLLIElement *) liElement {
+	if (_loginRequired) {
+		return;
+	}
+	
 	__block NSString *sessionName = nil;
 
 	[[liElement.children tags:@"li"] enumerateObjectsUsingBlock:^(DOMObject *object, unsigned index, BOOL *stop) {
@@ -191,7 +196,19 @@ enum {
 	[[liElement.children tags:@"a"] enumerateObjectsUsingBlock:^(DOMObject *object, unsigned index, BOOL *stop) {
 		DOMHTMLAnchorElement *anchorElement = (DOMHTMLAnchorElement *)object;
 
-		if ([anchorElement.href rangeOfString:@"devstreaming"].location == NSNotFound) {
+		if ([anchorElement.href rangeOfString:@"login"].location != NSNotFound) {
+			[self.downloadProgressBar setHidden:YES];
+			
+			NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:anchorElement.href]];
+			[self.webView.mainFrame loadRequest:request];
+			
+			NSAlert *alert = [NSAlert alertWithMessageText:@"Please login and try again." defaultButton:nil alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+			[alert beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+			
+			_loginRequired = YES;
+			*stop          = YES;
+			return;
+		} else if ([anchorElement.href rangeOfString:@"devstreaming"].location == NSNotFound) {
 			return;
 		}
 
@@ -212,7 +229,8 @@ enum {
 #pragma mark -
 
 - (void) webView:(WebView *) sender didFinishLoadForFrame:(WebFrame *) frame {
-	[self.downloadButton setEnabled:_foundVideosPage];
+	[self.downloadButton setEnabled:_foundVideosPage && !_loginRequired];
+	_loginRequired = NO;
 }
 
 - (void) webView:(WebView *) sender resource:(id) identifier didReceiveResponse:(NSURLResponse *) response fromDataSource:(WebDataSource *) dataSource {

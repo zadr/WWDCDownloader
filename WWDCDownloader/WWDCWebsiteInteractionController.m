@@ -54,25 +54,15 @@ enum {
 	WWDCVideoQualityBoth = (WWDCVideoQualitySD | WWDCVideoQualityHD)
 };
 
-@interface WWDCWebsiteInteractionController()
-@property (strong) NSMutableArray *knownDownloads;
-@property (assign) NSUInteger downloadsCount;
-@end
-
 @implementation WWDCWebsiteInteractionController {
 	BOOL _foundVideosPage;
-	BOOL _loginRequired;
+	BOOL _loggedIn;
+	BOOL _pastFirstLoad;
 	NSURL *_WWDCVideosURL;
 }
 
 - (id) init {
-	if (!(self = [super initWithWindowNibName:@"WWDCWebsiteInteractionController"])) {
-		return nil;
-	}
-
-	_knownDownloads = [NSMutableArray array];
-
-	return self;
+	return (self = [super initWithWindowNibName:@"WWDCWebsiteInteractionController"]);
 }
 
 #pragma mark -
@@ -82,6 +72,7 @@ enum {
 
 	_WWDCVideosURL = [NSURL URLWithString:@"https://developer.apple.com/wwdc/videos/"];
 
+	[self.webView setHidden:YES];
 	[self.webView.mainFrame loadRequest:[NSURLRequest requestWithURL:_WWDCVideosURL]];
 
 	self.webView.frameLoadDelegate = self;
@@ -96,7 +87,7 @@ enum {
 #pragma mark -
 
 - (IBAction) download:(id) sender {
-	[self.downloadProgressBar setHidden:NO];
+	[self.downloadProgressBar setHidden:!_foundVideosPage];
 
 	// find content first
 	[self.webView.mainFrameDocument.body.children enumerateObjectsUsingBlock:^(DOMHTMLElement *contentElement, unsigned contentIndex, BOOL *stopContentEnumeration) {
@@ -124,7 +115,13 @@ enum {
 
 					// finally, get each session's video/pdf in the list
 					[unorderedListElement.children enumerateObjectsUsingBlock:^(DOMObject *listObject, unsigned listIndex, BOOL *stopListEnumeration) {
-						[self findDownloadsFromDOMLIElement:(DOMHTMLLIElement *)listObject];
+						if (_loggedIn) {
+							[self findDownloadsFromDOMLIElement:(DOMHTMLLIElement *)listObject];
+						} else {
+							[self loginFromDOMLIElement:(DOMHTMLLIElement *)listObject];
+
+							*stopListEnumeration = YES;
+						}
 					}];
 
 					*stopUnorderedListEnumeration = YES;
@@ -165,20 +162,17 @@ enum {
 		__strong typeof(weakSelf) strongSelf = weakSelf;
 		NSLog(@"done downloading \"%@\" to %@", saveLocation.lastPathComponent, saveLocation);
 
-		strongSelf.downloadsCount++;
-		strongSelf.downloadProgressBar.doubleValue = strongSelf.downloadsCount;
+		strongSelf.downloadProgressBar.doubleValue++;
 	};
 
 	[[NSOperationQueue requestQueue] addOperation:request];
 
-	[self.knownDownloads addObject:saveLocation];
-
-	self.downloadProgressBar.maxValue = self.knownDownloads.count;
+	self.downloadProgressBar.maxValue++;
 }
 
 // see above for the element that is passed in
 - (void) findDownloadsFromDOMLIElement:(DOMHTMLLIElement *) liElement {
-	if (_loginRequired) {
+	if (!_loggedIn) {
 		return;
 	}
 	
@@ -196,19 +190,7 @@ enum {
 	[[liElement.children tags:@"a"] enumerateObjectsUsingBlock:^(DOMObject *object, unsigned index, BOOL *stop) {
 		DOMHTMLAnchorElement *anchorElement = (DOMHTMLAnchorElement *)object;
 
-		if ([anchorElement.href rangeOfString:@"login"].location != NSNotFound) {
-			[self.downloadProgressBar setHidden:YES];
-			
-			NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:anchorElement.href]];
-			[self.webView.mainFrame loadRequest:request];
-			
-			NSAlert *alert = [NSAlert alertWithMessageText:@"Please login and try again." defaultButton:nil alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
-			[alert beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
-			
-			_loginRequired = YES;
-			*stop          = YES;
-			return;
-		} else if ([anchorElement.href rangeOfString:@"devstreaming"].location == NSNotFound) {
+		if ([anchorElement.href rangeOfString:@"devstreaming"].location == NSNotFound) {
 			return;
 		}
 
@@ -228,18 +210,42 @@ enum {
 
 #pragma mark -
 
+- (void) loginFromDOMLIElement:(DOMHTMLLIElement *) liElement {
+	[[liElement.children tags:@"a"] enumerateObjectsUsingBlock:^(DOMObject *object, unsigned index, BOOL *stop) {
+		DOMHTMLAnchorElement *anchorElement = (DOMHTMLAnchorElement *)object;
+
+		if ([anchorElement.href rangeOfString:@"login"].location != NSNotFound) {
+			[self.downloadProgressBar setHidden:YES];
+
+			[self.webView.mainFrame stopLoading];
+
+			NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:anchorElement.href]];
+			[self.webView.mainFrame loadRequest:request];
+
+			*stop = YES;
+		}
+	}];
+}
+
+#pragma mark -
+
 - (void) webView:(WebView *) sender didFinishLoadForFrame:(WebFrame *) frame {
-	[self.downloadButton setEnabled:_foundVideosPage && !_loginRequired];
-	_loginRequired = NO;
+	self.window.title = frame.name;
+
+	if (!_foundVideosPage) {
+		[self download:nil];
+
+		_loggedIn = YES;
+	}
 }
 
 - (void) webView:(WebView *) sender resource:(id) identifier didReceiveResponse:(NSURLResponse *) response fromDataSource:(WebDataSource *) dataSource {
-	if (_foundVideosPage) {
-		return;
-	}
-
-	if ([response.URL isEqual:_WWDCVideosURL]) {
+	if ([response.URL.path hasSuffix:@"login"]) {
+		[self.webView setHidden:NO];
+		_pastFirstLoad = YES;
+	} else if ([response.URL.absoluteString hasPrefix:_WWDCVideosURL.absoluteString] && _pastFirstLoad && _loggedIn) {
 		_foundVideosPage = YES;
+		[self.downloadButton setEnabled:YES];
 	}
 }
 @end

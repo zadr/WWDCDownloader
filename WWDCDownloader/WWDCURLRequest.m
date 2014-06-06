@@ -20,9 +20,9 @@
 
 @property (nonatomic, strong) NSFileHandle *fileHandle;
 
-@property (nonatomic) BOOL cancelled;
-@property (nonatomic) BOOL finished;
-@property (nonatomic) BOOL executing;
+@property (nonatomic, assign) BOOL cancelled;
+@property (nonatomic, assign) BOOL finished;
+@property (nonatomic, assign) BOOL executing;
 @end
 
 #pragma mark -
@@ -39,6 +39,9 @@
 
 @implementation WWDCURLRequest
 @synthesize request = _request;
+@synthesize cancelled;
+@synthesize finished;
+@synthesize executing;
 
 + (instancetype) requestWithRemoteAddress:(NSString *) remoteAddress savePath:(NSString *) localPath {
 	NSParameterAssert(remoteAddress);

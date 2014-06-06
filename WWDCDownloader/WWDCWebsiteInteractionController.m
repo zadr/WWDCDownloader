@@ -122,9 +122,9 @@ typedef NS_ENUM(NSInteger, WWDCVideoQuality) {
 					[unorderedListElement.children wwdc_enumerateObjectsUsingBlock:^(DOMObject *listObject, unsigned listIndex, BOOL *stopListEnumeration) {
 						__strong typeof(weakSelf) strongSelf = weakSelf;
 						if (strongSelf->_loggedIn) {
-							[self findDownloadsFromDOMLIElement:(DOMHTMLLIElement *)listObject];
+							[strongSelf findDownloadsFromDOMLIElement:(DOMHTMLLIElement *)listObject];
 						} else {
-							[self loginFromDOMLIElement:(DOMHTMLLIElement *)listObject];
+							[strongSelf loginFromDOMLIElement:(DOMHTMLLIElement *)listObject];
 
 							*stopListEnumeration = YES;
 						}

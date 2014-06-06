@@ -24,5 +24,5 @@ typedef void (^WWDCRequestCompletionBlock)(WWDCURLRequest *request, WWDCURLRespo
 @end
 
 @interface NSOperationQueue (Additions)
-+ (NSOperationQueue *) requestQueue;
++ (NSOperationQueue *) wwdc_requestQueue;
 @end

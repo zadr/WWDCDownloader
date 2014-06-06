@@ -7,7 +7,7 @@
 
 #import "DOMIteration.h"
 
-#define iterate \
+#define wwdc_iterate \
 	do { \
 		BOOL stop = NO; \
  \
@@ -23,13 +23,15 @@
 	} while (0)
 
 @implementation DOMNodeList (Additions)
-- (void) enumerateObjectsUsingBlock:(void (^)(DOMObject *obj, unsigned idx, BOOL *stop)) block {
-	iterate;
+- (void) wwdc_enumerateObjectsUsingBlock:(void (^)(DOMObject *obj, unsigned idx, BOOL *stop)) block {
+	wwdc_iterate;
 }
 @end
 
 @implementation DOMHTMLCollection (Additions)
-- (void) enumerateObjectsUsingBlock:(void (^)(DOMHTMLElement *obj, unsigned idx, BOOL *stop)) block {
-	iterate;
+- (void) wwdc_enumerateObjectsUsingBlock:(void (^)(DOMHTMLElement *obj, unsigned idx, BOOL *stop)) block {
+	wwdc_iterate;
 }
 @end
+
+#undef wwdc_iterate

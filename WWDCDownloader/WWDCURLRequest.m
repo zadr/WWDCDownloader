@@ -249,7 +249,7 @@
 #pragma mark -
 
 @implementation NSOperationQueue (Additions)
-+ (NSOperationQueue *) requestQueue {
++ (NSOperationQueue *) wwdc_requestQueue {
 	static NSOperationQueue *requestQueue;
 
 	static dispatch_once_t pred;

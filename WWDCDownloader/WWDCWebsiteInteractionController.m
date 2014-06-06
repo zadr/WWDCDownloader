@@ -47,7 +47,7 @@ Example HTML that we look for (with the formatting cleaned up):
 
 #import <WebKit/WebKit.h>
 
-enum {
+typedef NS_ENUM(NSInteger, WWDCVideoQuality) {
 	WWDCVideoQualityNone = 0,
 	WWDCVideoQualitySD = (1 << 0),
 	WWDCVideoQualityHD = (1 << 1),
@@ -94,31 +94,31 @@ enum {
 	[self.downloadProgressBar setHidden:!_foundVideosPage];
 
 	// find content first
-	[self.webView.mainFrameDocument.body.children enumerateObjectsUsingBlock:^(DOMHTMLElement *contentElement, unsigned contentIndex, BOOL *stopContentEnumeration) {
+	[self.webView.mainFrameDocument.body.children wwdc_enumerateObjectsUsingBlock:^(DOMHTMLElement *contentElement, unsigned contentIndex, BOOL *stopContentEnumeration) {
 		if (![contentElement.className isEqualToString:@"content"]) {
 			return;
 		}
 
 		// then find the list of videos container
-		[contentElement.children enumerateObjectsUsingBlock:^(DOMHTMLElement *sectionElement, unsigned sectionIndex, BOOL *stopSectionEnumeration) {
+		[contentElement.children wwdc_enumerateObjectsUsingBlock:^(DOMHTMLElement *sectionElement, unsigned sectionIndex, BOOL *stopSectionEnumeration) {
 			if ([sectionElement.className rangeOfString:@"video-list"].location == NSNotFound) {
 				return;
 			}
 
 			// and find the section of the page that contains the actual list
-			[sectionElement.children enumerateObjectsUsingBlock:^(DOMHTMLElement *subsectionElement, unsigned subsectionIndex, BOOL *stopSubsectionEnumeration) {
+			[sectionElement.children wwdc_enumerateObjectsUsingBlock:^(DOMHTMLElement *subsectionElement, unsigned subsectionIndex, BOOL *stopSubsectionEnumeration) {
 				if (![subsectionElement.tagName.lowercaseString isEqualToString:@"section"]) {
 					return;
 				}
 
 				// and now find the list itself
-				[subsectionElement.children enumerateObjectsUsingBlock:^(DOMHTMLElement *unorderedListElement, unsigned unorderedListIndex, BOOL *stopUnorderedListEnumeration) {
+				[subsectionElement.children wwdc_enumerateObjectsUsingBlock:^(DOMHTMLElement *unorderedListElement, unsigned unorderedListIndex, BOOL *stopUnorderedListEnumeration) {
 					if (![unorderedListElement.tagName.lowercaseString isEqualToString:@"ul"]) {
 						return;
 					}
 
 					// finally, get each session's video/pdf in the list
-					[unorderedListElement.children enumerateObjectsUsingBlock:^(DOMObject *listObject, unsigned listIndex, BOOL *stopListEnumeration) {
+					[unorderedListElement.children wwdc_enumerateObjectsUsingBlock:^(DOMObject *listObject, unsigned listIndex, BOOL *stopListEnumeration) {
 						if (_loggedIn) {
 							[self findDownloadsFromDOMLIElement:(DOMHTMLLIElement *)listObject];
 						} else {
@@ -169,7 +169,7 @@ enum {
 		strongSelf.downloadProgressBar.doubleValue++;
 	};
 
-	[[NSOperationQueue requestQueue] addOperation:request];
+	[[NSOperationQueue wwdc_requestQueue] addOperation:request];
 
 	self.downloadProgressBar.maxValue++;
 }
@@ -182,7 +182,7 @@ enum {
 	
 	__block NSString *sessionName = nil;
 
-	[[liElement.children tags:@"li"] enumerateObjectsUsingBlock:^(DOMObject *object, unsigned index, BOOL *stop) {
+	[[liElement.children tags:@"li"] wwdc_enumerateObjectsUsingBlock:^(DOMObject *object, unsigned index, BOOL *stop) {
 		DOMHTMLLIElement *innerLIElement = (DOMHTMLLIElement *)object;
 		if ([innerLIElement.className isEqualToString:@"title"]) {
 			sessionName = [innerLIElement.innerText copy];
@@ -191,7 +191,7 @@ enum {
 		}
 	}];
 
-	[[liElement.children tags:@"a"] enumerateObjectsUsingBlock:^(DOMObject *object, unsigned index, BOOL *stop) {
+	[[liElement.children tags:@"a"] wwdc_enumerateObjectsUsingBlock:^(DOMObject *object, unsigned index, BOOL *stop) {
 		DOMHTMLAnchorElement *anchorElement = (DOMHTMLAnchorElement *)object;
 
 		if ([anchorElement.href rangeOfString:@"devstreaming"].location == NSNotFound) {
@@ -215,7 +215,7 @@ enum {
 #pragma mark -
 
 - (void) loginFromDOMLIElement:(DOMHTMLLIElement *) liElement {
-	[[liElement.children tags:@"a"] enumerateObjectsUsingBlock:^(DOMObject *object, unsigned index, BOOL *stop) {
+	[[liElement.children tags:@"a"] wwdc_enumerateObjectsUsingBlock:^(DOMObject *object, unsigned index, BOOL *stop) {
 		DOMHTMLAnchorElement *anchorElement = (DOMHTMLAnchorElement *)object;
 
 		if ([anchorElement.href rangeOfString:@"login"].location != NSNotFound) {

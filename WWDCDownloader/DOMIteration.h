@@ -8,9 +8,9 @@
 #import <WebKit/WebKit.h>
 
 @interface DOMNodeList (Additions)
-- (void) enumerateObjectsUsingBlock:(void (^)(DOMObject *obj, unsigned idx, BOOL *stop)) block;
+- (void) wwdc_enumerateObjectsUsingBlock:(void (^)(DOMObject *obj, unsigned idx, BOOL *stop)) block;
 @end
 
 @interface DOMHTMLCollection (Additions)
-- (void) enumerateObjectsUsingBlock:(void (^)(DOMHTMLElement *obj, unsigned idx, BOOL *stop)) block;
+- (void) wwdc_enumerateObjectsUsingBlock:(void (^)(DOMHTMLElement *obj, unsigned idx, BOOL *stop)) block;
 @end

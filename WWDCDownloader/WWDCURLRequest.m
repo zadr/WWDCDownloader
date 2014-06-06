@@ -146,11 +146,11 @@
 	if (completionBlock) {
 		__weak typeof(self) weakSelf = self;
 
-		[[NSOperationQueue mainQueue] addOperation:[NSBlockOperation blockOperationWithBlock:^{
+		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 			__strong typeof(weakSelf) strongSelf = weakSelf;
 
 			completionBlock(strongSelf, response, error);
-		}]];
+		}];
 	}
 
 	[self.fileHandle closeFile];
@@ -262,4 +262,3 @@
 	return requestQueue;
 }
 @end
-

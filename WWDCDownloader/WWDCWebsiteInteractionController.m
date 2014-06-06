@@ -94,6 +94,7 @@ typedef NS_ENUM(NSInteger, WWDCVideoQuality) {
 	[self.downloadProgressBar setHidden:!_foundVideosPage];
 
 	// find content first
+	__weak typeof(self) weakSelf = self;
 	[self.webView.mainFrameDocument.body.children wwdc_enumerateObjectsUsingBlock:^(DOMHTMLElement *contentElement, unsigned contentIndex, BOOL *stopContentEnumeration) {
 		if (![contentElement.className isEqualToString:@"content"]) {
 			return;
@@ -119,7 +120,8 @@ typedef NS_ENUM(NSInteger, WWDCVideoQuality) {
 
 					// finally, get each session's video/pdf in the list
 					[unorderedListElement.children wwdc_enumerateObjectsUsingBlock:^(DOMObject *listObject, unsigned listIndex, BOOL *stopListEnumeration) {
-						if (_loggedIn) {
+						__strong typeof(weakSelf) strongSelf = weakSelf;
+						if (strongSelf->_loggedIn) {
 							[self findDownloadsFromDOMLIElement:(DOMHTMLLIElement *)listObject];
 						} else {
 							[self loginFromDOMLIElement:(DOMHTMLLIElement *)listObject];

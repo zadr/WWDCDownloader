@@ -70,9 +70,13 @@ enum {
 - (void) awakeFromNib {
 	[super awakeFromNib];
 
-	_WWDCVideosURL = [NSURL URLWithString:@"https://developer.apple.com/wwdc/videos/"];
+	_WWDCVideosURL = [NSURL URLWithString:@"https://developer.apple.com/videos/wwdc/2014/"];
 
-	[self.webView setHidden:YES];
+    // Apparnetly login isn't required anymore for 2014
+    _loggedIn = YES;
+    _pastFirstLoad = YES;
+
+//	[self.webView setHidden:YES];
 	[self.webView.mainFrame loadRequest:[NSURLRequest requestWithURL:_WWDCVideosURL]];
 
 	self.webView.frameLoadDelegate = self;
@@ -97,7 +101,7 @@ enum {
 
 		// then find the list of videos container
 		[contentElement.children enumerateObjectsUsingBlock:^(DOMHTMLElement *sectionElement, unsigned sectionIndex, BOOL *stopSectionEnumeration) {
-			if (![sectionElement.className isEqualToString:@"video-list"]) {
+			if ([sectionElement.className rangeOfString:@"video-list"].location == NSNotFound) {
 				return;
 			}
 
@@ -144,7 +148,7 @@ enum {
 	static NSString *downloadsFolder = nil;
 	if (!downloadsFolder) {
 		NSString *temporaryFolder = [NSSearchPathForDirectoriesInDomains(NSDownloadsDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-		downloadsFolder = [[temporaryFolder stringByAppendingPathComponent:@"WWDC 2013/"] copy];
+		downloadsFolder = [[temporaryFolder stringByAppendingPathComponent:@"WWDC 2014/"] copy];
 
 		if (![[NSFileManager defaultManager] fileExistsAtPath:downloadsFolder]) {
 			[[NSFileManager defaultManager] createDirectoryAtPath:downloadsFolder withIntermediateDirectories:YES attributes:nil error:NULL];
@@ -194,11 +198,11 @@ enum {
 			return;
 		}
 
-		if (((self.videoPopUpButton.indexOfSelectedItem & WWDCVideoQualityHD) == WWDCVideoQualityHD) && [anchorElement.href hasSuffix:@"HD.mov?dl=1"]) {
+		if (((self.videoPopUpButton.indexOfSelectedItem & WWDCVideoQualityHD) == WWDCVideoQualityHD) && [anchorElement.href hasSuffix:@".mov?dl=1"] && ([anchorElement.href rangeOfString:@"_hd_"].location != NSNotFound)) {
 			[self downloadFromAnchorElement:anchorElement forSessionNamed:sessionName];
 		}
 
-		if (((self.videoPopUpButton.indexOfSelectedItem & WWDCVideoQualitySD) == WWDCVideoQualitySD) && [anchorElement.href hasSuffix:@"SD.mov?dl=1"]) {
+		if (((self.videoPopUpButton.indexOfSelectedItem & WWDCVideoQualitySD) == WWDCVideoQualitySD) && [anchorElement.href hasSuffix:@".mov?dl=1"] && ([anchorElement.href rangeOfString:@"_sd_"].location != NSNotFound)) {
 			[self downloadFromAnchorElement:anchorElement forSessionNamed:sessionName];
 		}
 

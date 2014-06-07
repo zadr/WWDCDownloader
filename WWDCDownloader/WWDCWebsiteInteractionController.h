@@ -14,9 +14,10 @@
 @property (assign) IBOutlet NSButton *PDFCheckbox;
 
 @property (assign) IBOutlet NSButton *downloadButton;
+@property (assign) IBOutlet NSButton *saveToButton;
 @property (assign) IBOutlet NSProgressIndicator *downloadProgressBar;
 
-- (IBAction) download:(id) sender;
-- (IBAction)setDownloadLocation:(id)sender;
+- (IBAction) downloadFiles:(id) sender;
+- (IBAction) pickDownloadsFolder:(id) sender;
 
 @end

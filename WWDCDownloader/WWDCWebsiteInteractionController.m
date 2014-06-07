@@ -60,6 +60,7 @@ typedef NS_ENUM(NSInteger, WWDCVideoQuality) {
 	BOOL _pastFirstLoad;
 	NSURL *_WWDCVideosURL;
 	NSString *_userDownloadLocation;
+	NSString *_downloadsFolder;
 }
 
 - (id) init {
@@ -90,11 +91,52 @@ typedef NS_ENUM(NSInteger, WWDCVideoQuality) {
 
 #pragma mark -
 
-- (IBAction) download:(id) sender {
-	[self.downloadProgressBar setHidden:!_foundVideosPage];
+- (NSString *) downloadsFolder {
+	@synchronized(self) {
+		if (!_downloadsFolder) {
+			_downloadsFolder = [_userDownloadLocation copy];
+
+			if (!_downloadsFolder) {
+				NSString *temporaryFolder = [NSSearchPathForDirectoriesInDomains(NSDownloadsDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+				_downloadsFolder = [[temporaryFolder stringByAppendingPathComponent:@"WWDC 2014/"] copy];
+
+				if (![[NSFileManager defaultManager] fileExistsAtPath:_downloadsFolder]) {
+					NSError *error = nil;
+
+					if (![[NSFileManager defaultManager] createDirectoryAtPath:_downloadsFolder withIntermediateDirectories:YES attributes:nil error:&error]) {
+						NSLog(@"Unable to create folder \"%@\" to download files to", error);
+					}
+				}
+			}
+		}
+
+		return _downloadsFolder;
+	}
+}
+
+- (void) resetDownloadsFolder {
+	@synchronized(self) {
+		_downloadsFolder = nil;
+	}
+}
+
+#pragma mark -
+
+- (IBAction) downloadFiles:(id) sender {
+	__weak typeof(self) weakSelf = self;
+
+	if (_foundVideosPage) {
+		[NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
+			__strong typeof(weakSelf) strongSelf = weakSelf;
+
+			[NSAnimationContext currentContext].duration = (1. / 3.);
+			[NSAnimationContext currentContext].allowsImplicitAnimation = YES;
+
+			[strongSelf.downloadProgressBar setHidden:!strongSelf->_foundVideosPage];
+		} completionHandler:NULL];
+	}
 
 	// find content first
-	__weak typeof(self) weakSelf = self;
 	[self.webView.mainFrameDocument.body.children wwdc_enumerateObjectsUsingBlock:^(DOMHTMLElement *contentElement, unsigned contentIndex, BOOL *stopContentEnumeration) {
 		if (![contentElement.className isEqualToString:@"content"]) {
 			return;
@@ -143,54 +185,61 @@ typedef NS_ENUM(NSInteger, WWDCVideoQuality) {
 	}];
 }
 
-- (IBAction)setDownloadLocation:(id)sender {
-	
-	NSOpenPanel *downloadLocation = [NSOpenPanel openPanel];
-	downloadLocation.canChooseDirectories = YES;
-	downloadLocation.canCreateDirectories = YES;
-	downloadLocation.canChooseFiles = NO;
+- (IBAction) pickDownloadsFolder:(id) sender {
+	void (^presentDownloadLocationPanel)() = ^{
+		NSOpenPanel *downloadLocationPanel = [NSOpenPanel openPanel];
+		downloadLocationPanel.canChooseDirectories = YES;
+		downloadLocationPanel.canCreateDirectories = YES;
+		downloadLocationPanel.canChooseFiles = NO;
 
-	[downloadLocation beginSheetModalForWindow:self.window completionHandler:^(NSInteger result){
-		if (result == NSFileHandlingPanelOKButton) {
-			NSArray* urls = [downloadLocation URLs];
-			for (NSURL *url in urls) {
-				if (!url.isFileURL) {
-					continue;
-				}
+		__weak typeof(self) weakSelf = self;
+		[downloadLocationPanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
+			if (result == NSFileHandlingPanelOKButton) {
+				for (NSURL *url in downloadLocationPanel.URLs) {
+					if (!url.isFileURL) {
+						continue;
+					}
 
-				// Double check and verify that the file exists and is a directory.
-				// (isDirectory is an out parameter)
-				BOOL isDirectory = NO;
-				if ([[NSFileManager defaultManager] fileExistsAtPath: url.path isDirectory:&isDirectory] && isDirectory) {
-					self->_userDownloadLocation = [url.path copy];
+					// Double check and verify that the file exists and is a directory.
+					// (isDirectory is an out parameter)
+					BOOL isDirectory = NO;
+					if ([[NSFileManager defaultManager] fileExistsAtPath: url.path isDirectory:&isDirectory] && isDirectory) {
+						__strong typeof(weakSelf) strongSelf = weakSelf;
+						strongSelf->_userDownloadLocation = [url.path copy];
+						[strongSelf resetDownloadsFolder];
+					}
 				}
 			}
-		}
-	}];
+		}];
+	};
+
+	if ([NSOperationQueue wwdc_requestQueue].operationCount) {
+		NSAlert *alert = [[NSAlert alloc] init];
+		alert.alertStyle = NSWarningAlertStyle;
+		alert.messageText = @"Notice";
+		alert.informativeText = @"Setting the download location will affect currently pending download operations.";
+
+		[alert addButtonWithTitle:@"OK"];
+		[alert addButtonWithTitle:@"Cancel"];
+		[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse response) {
+			if (response != NSModalResponseAbort) {
+				// do this async to give the alert sheet a chance to dismiss, before we present a second sheet on the window
+				dispatch_async(dispatch_get_main_queue(), presentDownloadLocationPanel);
+			}
+		}];
+	} else {
+		presentDownloadLocationPanel();
+	}
 }
 
 #pragma mark -
 
 // see above for the element that is passed in
 - (void) downloadFromAnchorElement:(DOMHTMLAnchorElement *) anchorElement forSessionNamed:(NSString *) sessionName {
-	static NSString *downloadsFolder = nil;
-	if (!downloadsFolder) {
-		downloadsFolder = [_userDownloadLocation copy];
-
-		if (!downloadsFolder) {
-			NSString *temporaryFolder = [NSSearchPathForDirectoriesInDomains(NSDownloadsDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-			downloadsFolder = [[temporaryFolder stringByAppendingPathComponent:@"WWDC 2014/"] copy];
-
-			if (![[NSFileManager defaultManager] fileExistsAtPath:downloadsFolder]) {
-				[[NSFileManager defaultManager] createDirectoryAtPath:downloadsFolder withIntermediateDirectories:YES attributes:nil error:NULL];
-			}
-		}
-	}
-
 	NSString *name = [anchorElement.href.lastPathComponent componentsSeparatedByString:@"?"][0];
 	NSArray *components = [name componentsSeparatedByString:@"."];
 	NSString *saveLocation = [NSString stringWithFormat:@"%@ %@.%@", components[0], sessionName, components[1]];
-	saveLocation = [downloadsFolder stringByAppendingPathComponent:saveLocation];
+	saveLocation = [self.downloadsFolder stringByAppendingPathComponent:saveLocation];
 
 	__weak typeof(self) weakSelf = self;
 	WWDCURLRequest *request = [WWDCURLRequest requestWithRemoteAddress:anchorElement.href savePath:saveLocation];
@@ -269,7 +318,7 @@ typedef NS_ENUM(NSInteger, WWDCVideoQuality) {
 	self.window.title = frame.name;
 
 	if (!_foundVideosPage) {
-		[self download:nil];
+		[self downloadFiles:nil];
 
 		_loggedIn = YES;
 	}

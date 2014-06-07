@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6154.17" systemVersion="13D65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6154.17" systemVersion="14A238x" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment defaultVersion="1080" identifier="macosx"/>
         <development version="5000" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6154.17"/>
         <plugIn identifier="com.apple.WebKitIBPlugin" version="6154.17"/>
@@ -10,8 +9,9 @@
         <customObject id="-2" userLabel="File's Owner" customClass="WWDCWebsiteInteractionController">
             <connections>
                 <outlet property="PDFCheckbox" destination="tdz-K1-rIS" id="i9j-Fz-A4t"/>
-                <outlet property="downloadButton" destination="NZy-fD-Iji" id="nSj-tc-pSv"/>
+                <outlet property="downloadButton" destination="iHP-45-A4Y" id="KVo-Me-GHB"/>
                 <outlet property="downloadProgressBar" destination="iTS-qZ-m1M" id="f4n-WS-5yZ"/>
+                <outlet property="saveToButton" destination="NZy-fD-Iji" id="0sp-me-4fZ"/>
                 <outlet property="videoPopUpButton" destination="wfg-Qd-HcC" id="22e-HQ-bgG"/>
                 <outlet property="webView" destination="xep-Fu-xaN" id="PpM-oc-Lag"/>
                 <outlet property="window" destination="uGQ-0R-zCI" id="314-UV-mDt"/>
@@ -21,56 +21,48 @@
         <customObject id="-3" userLabel="Application"/>
         <window title="WWDCDownloader" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" showsToolbarButton="NO" animationBehavior="default" id="uGQ-0R-zCI">
             <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES"/>
-            <rect key="contentRect" x="335" y="390" width="661" height="469"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
+            <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
+            <rect key="contentRect" x="335" y="390" width="1024" height="453"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
             <view key="contentView" id="sRh-du-LW5">
-                <rect key="frame" x="0.0" y="0.0" width="661" height="469"/>
+                <rect key="frame" x="0.0" y="0.0" width="1024" height="453"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <webView id="xep-Fu-xaN">
-                        <rect key="frame" x="0.0" y="54" width="661" height="415"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <webPreferences key="preferences" defaultFontSize="12" defaultFixedFontSize="12" javaEnabled="NO">
+                    <webView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xep-Fu-xaN">
+                        <rect key="frame" x="0.0" y="54" width="1024" height="480"/>
+                        <webPreferences key="preferences" defaultFontSize="12" defaultFixedFontSize="12" javaEnabled="NO" javaScriptCanOpenWindowsAutomatically="NO">
                             <nil key="identifier"/>
                         </webPreferences>
                     </webView>
-                    <button id="tdz-K1-rIS">
-                        <rect key="frame" x="175" y="21" width="120" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <button misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tdz-K1-rIS">
+                        <rect key="frame" x="186" y="18" width="120" height="18"/>
                         <buttonCell key="cell" type="check" title="Download PDFs" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="bIJ-Kc-XfD">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <button verticalHuggingPriority="750" id="NZy-fD-Iji">
-                        <rect key="frame" x="427" y="13" width="138" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NZy-fD-Iji">
+                        <rect key="frame" x="769" y="9" width="138" height="32"/>
                         <buttonCell key="cell" type="push" title="Save Location..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="o4o-7T-gMz">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
-                            <connections>
-                                <action selector="setDownloadLocation:" target="-2" id="fTs-CW-NcI"/>
-                            </connections>
                         </buttonCell>
+                        <connections>
+                            <action selector="pickDownloadsFolder:" target="-2" id="upX-Dz-mlM"/>
+                        </connections>
                     </button>
-                    <progressIndicator maxValue="100" style="bar" id="iTS-qZ-m1M">
-                        <rect key="frame" x="301" y="20" width="124" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    </progressIndicator>
-                    <button verticalHuggingPriority="750" id="iHP-45-A4Y">
-                        <rect key="frame" x="559" y="13" width="103" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iHP-45-A4Y">
+                        <rect key="frame" x="907" y="9" width="103" height="32"/>
                         <buttonCell key="cell" type="push" title="Download" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dMl-C2-OfP">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="download:" target="-2" id="HQW-6w-1JF"/>
+                            <action selector="downloadFiles:" target="-2" id="yCl-9D-ZNR"/>
                         </connections>
                     </button>
-                    <popUpButton verticalHuggingPriority="750" id="wfg-Qd-HcC">
-                        <rect key="frame" x="6" y="17" width="165" height="26"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <popUpButton verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wfg-Qd-HcC">
+                        <rect key="frame" x="18" y="13" width="165" height="26"/>
                         <popUpButtonCell key="cell" type="push" title="Download HD Quality" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="60l-2B-Ki4" id="M1E-JN-qCI">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
@@ -86,12 +78,35 @@
                             </menu>
                         </popUpButtonCell>
                     </popUpButton>
+                    <progressIndicator misplaced="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="iTS-qZ-m1M">
+                        <rect key="frame" x="312" y="15" width="455" height="20"/>
+                    </progressIndicator>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="wfg-Qd-HcC" firstAttribute="leading" secondItem="sRh-du-LW5" secondAttribute="leading" constant="20" id="1j8-pI-r4P"/>
+                    <constraint firstAttribute="bottom" secondItem="iTS-qZ-m1M" secondAttribute="bottom" constant="16" id="3Pc-cV-i83"/>
+                    <constraint firstAttribute="bottom" secondItem="xep-Fu-xaN" secondAttribute="bottom" constant="54" id="3vh-gc-Rfr"/>
+                    <constraint firstItem="iTS-qZ-m1M" firstAttribute="top" secondItem="xep-Fu-xaN" secondAttribute="bottom" constant="20" id="B7W-TR-Q0L"/>
+                    <constraint firstAttribute="bottom" secondItem="NZy-fD-Iji" secondAttribute="bottom" constant="16" id="F7c-nH-Gqi"/>
+                    <constraint firstItem="xep-Fu-xaN" firstAttribute="leading" secondItem="sRh-du-LW5" secondAttribute="leading" id="Ksg-Da-Mi0"/>
+                    <constraint firstItem="NZy-fD-Iji" firstAttribute="leading" secondItem="iTS-qZ-m1M" secondAttribute="trailing" constant="8" id="Qlz-pX-CZD"/>
+                    <constraint firstItem="xep-Fu-xaN" firstAttribute="top" secondItem="sRh-du-LW5" secondAttribute="top" id="UeY-0S-tZX"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="iTS-qZ-m1M" secondAttribute="bottom" constant="16" id="WsT-pT-4CA"/>
+                    <constraint firstItem="iHP-45-A4Y" firstAttribute="leading" secondItem="NZy-fD-Iji" secondAttribute="trailing" constant="12" id="aGP-AT-fVy"/>
+                    <constraint firstItem="iTS-qZ-m1M" firstAttribute="leading" secondItem="tdz-K1-rIS" secondAttribute="trailing" constant="8" id="aYZ-qJ-nTK"/>
+                    <constraint firstAttribute="bottom" secondItem="iHP-45-A4Y" secondAttribute="bottom" constant="16" id="dOY-ld-BUz"/>
+                    <constraint firstAttribute="bottom" secondItem="wfg-Qd-HcC" secondAttribute="bottom" constant="16" id="eCC-ol-VSw"/>
+                    <constraint firstAttribute="trailing" secondItem="xep-Fu-xaN" secondAttribute="trailing" id="odc-Kd-9WI"/>
+                    <constraint firstItem="tdz-K1-rIS" firstAttribute="leading" secondItem="wfg-Qd-HcC" secondAttribute="trailing" constant="8" id="r1A-BP-AnJ"/>
+                    <constraint firstAttribute="bottom" secondItem="tdz-K1-rIS" secondAttribute="bottom" constant="20" id="sH8-1C-fip"/>
+                    <constraint firstAttribute="trailing" secondItem="iHP-45-A4Y" secondAttribute="trailing" constant="20" id="u35-Ks-wCL"/>
+                </constraints>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="KtR-5K-w1D"/>
                 <outlet property="initialFirstResponder" destination="xep-Fu-xaN" id="b5S-xi-1o2"/>
             </connections>
+            <point key="canvasLocation" x="690" y="336.5"/>
         </window>
     </objects>
 </document>

@@ -59,7 +59,7 @@ typedef NS_ENUM(NSInteger, WWDCVideoQuality) {
 	BOOL _loggedIn;
 	BOOL _pastFirstLoad;
 	NSURL *_WWDCVideosURL;
-    NSString *_userDownloadLocation;
+	NSString *_userDownloadLocation;
 }
 
 - (id) init {
@@ -73,11 +73,10 @@ typedef NS_ENUM(NSInteger, WWDCVideoQuality) {
 
 	_WWDCVideosURL = [NSURL URLWithString:@"https://developer.apple.com/videos/wwdc/2014/"];
 
-    // Apparnetly login isn't required anymore for 2014
-    _loggedIn = YES;
-    _pastFirstLoad = YES;
+	// Apparently login isn't required anymore
+	_loggedIn = YES;
+	_pastFirstLoad = YES;
 
-//	[self.webView setHidden:YES];
 	[self.webView.mainFrame loadRequest:[NSURLRequest requestWithURL:_WWDCVideosURL]];
 
 	self.webView.frameLoadDelegate = self;
@@ -145,51 +144,53 @@ typedef NS_ENUM(NSInteger, WWDCVideoQuality) {
 }
 
 - (IBAction)setDownloadLocation:(id)sender {
-    
-    NSOpenPanel *downloadLocation = [NSOpenPanel openPanel];
-    [downloadLocation setCanChooseDirectories:YES];
-    [downloadLocation setCanCreateDirectories:YES];
-    [downloadLocation beginSheetModalForWindow:self.window completionHandler:^(NSInteger result){
-        if (result == NSFileHandlingPanelOKButton) {
-            NSArray* urls = [downloadLocation URLs];
-            for (NSURL *url in urls) {
-                if (url.isFileURL) {
-                    BOOL isDir = NO;
-                    // Verify that the file exists
-                    // and is indeed a directory (isDirectory is an out parameter)
-                    if ([[NSFileManager defaultManager] fileExistsAtPath: url.path isDirectory: &isDir]
-                        && isDir) {
-                        self->_userDownloadLocation = url.path;
-                    }
-                }
-            }
-        }
-    }];
-    
+	
+	NSOpenPanel *downloadLocation = [NSOpenPanel openPanel];
+	downloadLocation.canChooseDirectories = YES;
+	downloadLocation.canCreateDirectories = YES;
+	downloadLocation.canChooseFiles = NO;
+
+	[downloadLocation beginSheetModalForWindow:self.window completionHandler:^(NSInteger result){
+		if (result == NSFileHandlingPanelOKButton) {
+			NSArray* urls = [downloadLocation URLs];
+			for (NSURL *url in urls) {
+				if (!url.isFileURL) {
+					continue;
+				}
+
+				// Double check and verify that the file exists and is a directory.
+				// (isDirectory is an out parameter)
+				BOOL isDirectory = NO;
+				if ([[NSFileManager defaultManager] fileExistsAtPath: url.path isDirectory:&isDirectory] && isDirectory) {
+					self->_userDownloadLocation = [url.path copy];
+				}
+			}
+		}
+	}];
 }
 
 #pragma mark -
 
 // see above for the element that is passed in
 - (void) downloadFromAnchorElement:(DOMHTMLAnchorElement *) anchorElement forSessionNamed:(NSString *) sessionName {
-    
-    static NSString *downloadsFolder = nil;
-    if (!downloadsFolder) {
-        NSString *temporaryFolder = [NSSearchPathForDirectoriesInDomains(NSDownloadsDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-        downloadsFolder = [[temporaryFolder stringByAppendingPathComponent:@"WWDC 2014/"] copy];
+	static NSString *downloadsFolder = nil;
+	if (!downloadsFolder) {
+		downloadsFolder = [_userDownloadLocation copy];
 
-        if (![[NSFileManager defaultManager] fileExistsAtPath:downloadsFolder]) {
-            [[NSFileManager defaultManager] createDirectoryAtPath:downloadsFolder withIntermediateDirectories:YES attributes:nil error:NULL];
-    
-        }
-    }
-        
-   
+		if (!downloadsFolder) {
+			NSString *temporaryFolder = [NSSearchPathForDirectoriesInDomains(NSDownloadsDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+			downloadsFolder = [[temporaryFolder stringByAppendingPathComponent:@"WWDC 2014/"] copy];
+
+			if (![[NSFileManager defaultManager] fileExistsAtPath:downloadsFolder]) {
+				[[NSFileManager defaultManager] createDirectoryAtPath:downloadsFolder withIntermediateDirectories:YES attributes:nil error:NULL];
+			}
+		}
+	}
 
 	NSString *name = [anchorElement.href.lastPathComponent componentsSeparatedByString:@"?"][0];
 	NSArray *components = [name componentsSeparatedByString:@"."];
 	NSString *saveLocation = [NSString stringWithFormat:@"%@ %@.%@", components[0], sessionName, components[1]];
-    saveLocation = [_userDownloadLocation ? _userDownloadLocation : downloadsFolder stringByAppendingPathComponent:saveLocation];
+	saveLocation = [downloadsFolder stringByAppendingPathComponent:saveLocation];
 
 	__weak typeof(self) weakSelf = self;
 	WWDCURLRequest *request = [WWDCURLRequest requestWithRemoteAddress:anchorElement.href savePath:saveLocation];

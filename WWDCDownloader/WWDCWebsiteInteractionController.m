@@ -186,66 +186,73 @@ typedef NS_ENUM(NSInteger, WWDCVideoQuality) {
 }
 
 - (IBAction) pickDownloadsFolder:(id) sender {
-	void (^presentDownloadLocationPanel)() = ^{
-		NSOpenPanel *downloadLocationPanel = [NSOpenPanel openPanel];
-		downloadLocationPanel.canChooseDirectories = YES;
-		downloadLocationPanel.canCreateDirectories = YES;
-		downloadLocationPanel.canChooseFiles = NO;
+	NSOpenPanel *downloadLocationPanel = [NSOpenPanel openPanel];
+	downloadLocationPanel.canChooseDirectories = YES;
+	downloadLocationPanel.canCreateDirectories = YES;
+	downloadLocationPanel.canChooseFiles = NO;
+	downloadLocationPanel.directoryURL = [NSURL fileURLWithPath:self.downloadsFolder];
+	if ([NSOperationQueue wwdc_requestQueue].operationCount) {
+		downloadLocationPanel.title = @"Please Note";
+		downloadLocationPanel.message = @"Setting the download location will affect currently pending download operations.";
+	}
 
-		__weak typeof(self) weakSelf = self;
-		[downloadLocationPanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
-			if (result == NSFileHandlingPanelOKButton) {
-				for (NSURL *url in downloadLocationPanel.URLs) {
-					if (!url.isFileURL) {
-						continue;
-					}
+	__weak typeof(self) weakSelf = self;
+	[downloadLocationPanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
+		if (result == NSFileHandlingPanelOKButton) {
+			for (NSURL *url in downloadLocationPanel.URLs) {
+				if (!url.isFileURL) {
+					continue;
+				}
 
-					// Double check and verify that the file exists and is a directory.
-					// (isDirectory is an out parameter)
-					BOOL isDirectory = NO;
-					if ([[NSFileManager defaultManager] fileExistsAtPath: url.path isDirectory:&isDirectory] && isDirectory) {
-						__strong typeof(weakSelf) strongSelf = weakSelf;
-						strongSelf->_userDownloadLocation = [url.path copy];
-						[strongSelf resetDownloadsFolder];
-					}
+				// Double check and verify that the file exists and is a directory.
+				// (isDirectory is an out parameter)
+				BOOL isDirectory = NO;
+				if ([[NSFileManager defaultManager] fileExistsAtPath: url.path isDirectory:&isDirectory] && isDirectory) {
+					__strong typeof(weakSelf) strongSelf = weakSelf;
+					strongSelf->_userDownloadLocation = [url.path copy];
+					[strongSelf resetDownloadsFolder];
 				}
 			}
-		}];
-	};
-
-	if ([NSOperationQueue wwdc_requestQueue].operationCount) {
-		NSAlert *alert = [[NSAlert alloc] init];
-		alert.alertStyle = NSWarningAlertStyle;
-		alert.messageText = @"Notice";
-		alert.informativeText = @"Setting the download location will affect currently pending download operations.";
-
-		[alert addButtonWithTitle:@"OK"];
-		[alert addButtonWithTitle:@"Cancel"];
-		[alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse response) {
-			if (response != NSModalResponseAbort) {
-				// do this async to give the alert sheet a chance to dismiss, before we present a second sheet on the window
-				dispatch_async(dispatch_get_main_queue(), presentDownloadLocationPanel);
-			}
-		}];
-	} else {
-		presentDownloadLocationPanel();
-	}
+		}
+	}];
 }
 
 #pragma mark -
 
 // see above for the element that is passed in
 - (void) downloadFromAnchorElement:(DOMHTMLAnchorElement *) anchorElement forSessionNamed:(NSString *) sessionName {
+	// In 2013, we needed to explicitly exclude the session name in the video. As of 2014's DOM, we do not need to do this.
+	// But, we should still check there first, because there was a bug where we would include the session name twice, and, we should
+	// be nice and fix that for people by moving files around.
 	NSString *name = [anchorElement.href.lastPathComponent componentsSeparatedByString:@"?"][0];
 	NSArray *components = [name componentsSeparatedByString:@"."];
-	NSString *saveLocation = [NSString stringWithFormat:@"%@ %@.%@", components[0], sessionName, components[1]];
-	saveLocation = [self.downloadsFolder stringByAppendingPathComponent:saveLocation];
+	NSString *originalSaveLocation = [NSString stringWithFormat:@"%@ %@.%@", components[0], sessionName, components[1]];
+	originalSaveLocation = [self.downloadsFolder stringByAppendingPathComponent:originalSaveLocation];
+
+	NSString *correct2014SaveLocation = nil;
+	if (10 < name.length) { // len("xyz_hd.mov"), we have the session quality, an underscore, and, id
+		correct2014SaveLocation = [self.downloadsFolder stringByAppendingPathComponent:name];
+	} else { // we need to include the session name ourselves
+		correct2014SaveLocation = [NSString stringWithFormat:@"%@_%@.%@", components[0], sessionName.lowercaseString, components[1]];
+		correct2014SaveLocation = [self.downloadsFolder stringByAppendingPathComponent:correct2014SaveLocation];
+	}
+
+	BOOL downloadNeedMigration2014 = [[NSFileManager defaultManager] fileExistsAtPath:originalSaveLocation];
 
 	__weak typeof(self) weakSelf = self;
-	WWDCURLRequest *request = [WWDCURLRequest requestWithRemoteAddress:anchorElement.href savePath:saveLocation];
+	WWDCURLRequest *request = [WWDCURLRequest requestWithRemoteAddress:anchorElement.href savePath:downloadNeedMigration2014 ? originalSaveLocation : correct2014SaveLocation];
 	request.completionBlock = ^{
 		__strong typeof(weakSelf) strongSelf = weakSelf;
-		NSLog(@"done downloading \"%@\" to %@", saveLocation.lastPathComponent, saveLocation);
+		if (downloadNeedMigration2014) {
+			NSLog(@"Renaming %@ to %@", originalSaveLocation.lastPathComponent, correct2014SaveLocation.lastPathComponent);
+
+			NSError *error = nil;
+			if (![[NSFileManager defaultManager] moveItemAtPath:originalSaveLocation toPath:correct2014SaveLocation error:&error]) {
+				NSLog(@"Error renaming file to \"%@\": %@", correct2014SaveLocation.lastPathComponent, error);
+			}
+		}
+
+		NSLog(@"done downloading \"%@\" to %@", correct2014SaveLocation.lastPathComponent, correct2014SaveLocation.stringByDeletingLastPathComponent);
 
 		strongSelf.downloadProgressBar.doubleValue++;
 	};
@@ -279,11 +286,11 @@ typedef NS_ENUM(NSInteger, WWDCVideoQuality) {
 			return;
 		}
 
-		if (((self.videoPopUpButton.indexOfSelectedItem & WWDCVideoQualityHD) == WWDCVideoQualityHD) && [anchorElement.href hasSuffix:@".mov?dl=1"] && ([anchorElement.href rangeOfString:@"_hd_"].location != NSNotFound)) {
+		if (((self.videoPopUpButton.indexOfSelectedItem & WWDCVideoQualityHD) == WWDCVideoQualityHD) && [anchorElement.href hasSuffix:@".mov?dl=1"] && ([anchorElement.href rangeOfString:@"_hd"].location != NSNotFound)) {
 			[self downloadFromAnchorElement:anchorElement forSessionNamed:sessionName];
 		}
 
-		if (((self.videoPopUpButton.indexOfSelectedItem & WWDCVideoQualitySD) == WWDCVideoQualitySD) && [anchorElement.href hasSuffix:@".mov?dl=1"] && ([anchorElement.href rangeOfString:@"_sd_"].location != NSNotFound)) {
+		if (((self.videoPopUpButton.indexOfSelectedItem & WWDCVideoQualitySD) == WWDCVideoQualitySD) && [anchorElement.href hasSuffix:@".mov?dl=1"] && ([anchorElement.href rangeOfString:@"_sd"].location != NSNotFound)) {
 			[self downloadFromAnchorElement:anchorElement forSessionNamed:sessionName];
 		}
 

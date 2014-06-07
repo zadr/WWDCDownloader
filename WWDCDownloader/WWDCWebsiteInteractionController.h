@@ -17,5 +17,6 @@
 @property (assign) IBOutlet NSProgressIndicator *downloadProgressBar;
 
 - (IBAction) download:(id) sender;
+- (IBAction)setDownloadLocation:(id)sender;
 
 @end
